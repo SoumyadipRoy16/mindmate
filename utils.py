@@ -33,8 +33,3 @@ def recognize_speech():
     except sr.RequestError:
         st.error("Sorry, my speech recognition service is currently unavailable.")
         return ""
-
-def text_to_speech(text, filename='output.mp3'):
-    tts = gTTS(text)
-    tts.save(filename)
-    return filename
