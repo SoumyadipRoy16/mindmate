@@ -1,5 +1,4 @@
 import streamlit as st
-import pyaudio
 import time
 import os
 from google_search import google_search
