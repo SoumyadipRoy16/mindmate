@@ -1,0 +1,8 @@
+streamlit
+requests
+transformers
+gtts
+beautifulsoup4
+urllib3
+speechrecognition
+pyaudio
