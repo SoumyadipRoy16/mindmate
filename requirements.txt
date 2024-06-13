@@ -5,3 +5,4 @@ gtts
 beautifulsoup4
 urllib3
 speechrecognition
+pyaudio
