@@ -2,9 +2,8 @@ import streamlit as st
 import time
 import os
 from google_search import google_search
-#from qa_model import answer_question_bert
 from feedback import submit_feedback
-from utils import extract_paragraphs, recognize_speech, text_to_speech
+from utils import extract_paragraphs, recognize_speech
 
 def main():
     st.set_page_config(page_title="MindMate Search", page_icon=":brain:")
@@ -53,13 +52,6 @@ def main():
                             st.markdown(f"#### Extracted Content from [{title}]({link}):")
                             st.text_area(f"Content {i}:", value=content, height=150)
 
-                            if st.button(f"Listen to Content {i}"):
-                                filename = text_to_speech(content)
-                                audio_file = open(filename, 'rb')
-                                audio_bytes = audio_file.read()
-                                st.audio(audio_bytes, format='audio/mp3')
-                                os.remove(filename)
-
                 else:
                     st.error("No articles found.")
 
@@ -93,13 +85,6 @@ def main():
                         if content:
                             st.markdown(f"#### Extracted Content from [{title}]({link}):")
                             st.text_area(f"Content {i}:", value=content, height=150)
-
-                            if st.button(f"Listen to Content {i}"):
-                                filename = text_to_speech(content)
-                                audio_file = open(filename, 'rb')
-                                audio_bytes = audio_file.read()
-                                st.audio(audio_bytes, format='audio/mp3')
-                                os.remove(filename)
 
                 else:
                     st.error("No results found. Please try again.")
