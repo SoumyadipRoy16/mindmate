@@ -1,8 +1,8 @@
 import streamlit as st
 import requests
 
-API_KEY = 'AIzaSyCALQgKvX2M4odY6wMi2byenYPzDzR7KEA'
-SEARCH_ENGINE_ID = '910f8417c795a412d'
+API_KEY = ''
+SEARCH_ENGINE_ID = ''
 
 def google_search(query, search_type):
     url = f"https://www.googleapis.com/customsearch/v1?key={API_KEY}&cx={SEARCH_ENGINE_ID}&q={query}"
