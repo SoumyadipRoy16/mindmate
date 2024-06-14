@@ -26,7 +26,35 @@ def main():
         st.write('<textarea id="result-text" style="width: 100%; height: 150px;"></textarea>', unsafe_allow_html=True)
         
         # Include JavaScript file
-        st.markdown('<script src="speech_recognition.js"></script>', unsafe_allow_html=True)
+        st.markdown(
+            """
+            <script>
+                const startButton = document.getElementById("start-record-btn");
+                const resultText = document.getElementById("result-text");
+
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const recognition = new SpeechRecognition();
+
+                recognition.continuous = false;
+                recognition.interimResults = false;
+
+                startButton.addEventListener("click", () => {
+                    recognition.start();
+                });
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    resultText.value = transcript;
+                    recognition.stop();
+                };
+
+                recognition.onerror = (event) => {
+                    console.error(event.error);
+                };
+            </script>
+            """, 
+            unsafe_allow_html=True
+        )
 
         user_input = st.text_area("Recognized Speech:", key="result-text", height=150)
         
