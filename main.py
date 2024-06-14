@@ -3,7 +3,7 @@ import time
 import os
 from google_search import google_search
 from feedback import submit_feedback
-from utils import extract_paragraphs, recognize_speech
+from utils import extract_paragraphs
 
 def main():
     st.set_page_config(page_title="MindMate Search", page_icon=":brain:")
@@ -22,19 +22,17 @@ def main():
 
     if use_speech_recognition == 'Speak':
         st.info("Speak your question or concern...")
-        is_listening = False
-        while True:
-            if not is_listening:
-                st.write("")
-                is_listening = True
-                user_input = recognize_speech()
-                if not user_input:
-                    st.write("Speech recognition failed. Please try again.")
-                    break
+        st.write('<button id="start-record-btn">Start Recording</button>', unsafe_allow_html=True)
+        st.write('<textarea id="result-text" style="width: 100%; height: 150px;"></textarea>', unsafe_allow_html=True)
+        
+        # Include JavaScript file
+        st.markdown('<script src="speech_recognition.js"></script>', unsafe_allow_html=True)
 
-                st.text_area("Recognized Speech:", value=user_input, height=150)
+        user_input = st.text_area("Recognized Speech:", key="result-text", height=150)
+        
+        if st.button("Submit"):
+            if user_input:
                 search_results = google_search(user_input, 'Articles')
-
                 if search_results:
                     st.subheader("Top Articles:")
                     for i, result in enumerate(search_results[:5], start=1):
@@ -51,14 +49,10 @@ def main():
                         if content:
                             st.markdown(f"#### Extracted Content from [{title}]({link}):")
                             st.text_area(f"Content {i}:", value=content, height=150)
-
                 else:
                     st.error("No articles found.")
-
-                st.write("")
-                is_listening = False
-                if not st.button("Continue Speaking"):
-                    break
+            else:
+                st.warning("Speech recognition failed. Please try again.")
 
     else:
         user_input = st.text_area("Enter your question or concern:", height=150)
