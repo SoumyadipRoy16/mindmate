@@ -1,8 +1,12 @@
 import streamlit as st
 import requests
+from dotenv import load_dotenv
+import os
 
-API_KEY = ''
-SEARCH_ENGINE_ID = ''
+load_dotenv()
+
+API_KEY = os.getenv('API_KEY')
+SEARCH_ENGINE_ID = os.getenv('SEARCH_ENGINE_ID')
 
 def google_search(query, search_type):
     url = f"https://www.googleapis.com/customsearch/v1?key={API_KEY}&cx={SEARCH_ENGINE_ID}&q={query}"
