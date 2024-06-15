@@ -5,6 +5,7 @@ from utils import extract_paragraphs
 from wit import Wit
 import time
 import speech_recognition as sr
+import os
 
 # Initialize Wit.ai client
 WIT_ACCESS_TOKEN = os.getenv('WIT_ACCESS_TOKEN')# Replace with your Wit.ai access token
