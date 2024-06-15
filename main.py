@@ -13,7 +13,7 @@ def recognize_speech():
         st.info("Simulating audio input...")
 
         # Generate a simple sine wave audio segment for 1 second
-        sine_wave = Sine(440).to_audio_segment(duration=1000)  # 440 Hz frequency for 1 second
+        sine_wave = Sine(440).to_audio_segment(duration=10000)  # 440 Hz frequency for 1 second
         audio = sine_wave.set_sample_width(2).set_frame_rate(16000)  # Adjust sample width and frame rate
 
         # Save the audio segment to a temporary file
