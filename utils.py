@@ -18,18 +18,17 @@ def extract_paragraphs(url):
         st.error(f"Error extracting content from {url}: {e}")
         return ""
 
+
 def recognize_speech():
     r = sr.Recognizer()
     with sr.Microphone() as source:
-        st.info("Listening...")
+        st.info("Speak your question or concern...")
         audio = r.listen(source)
-        st.info("Processing...")
-    try:
-        user_input = r.recognize_google(audio)
-        return user_input
-    except sr.UnknownValueError:
-        st.error("Sorry, I could not understand what you said.")
-        return ""
-    except sr.RequestError:
-        st.error("Sorry, my speech recognition service is currently unavailable.")
-        return ""
+        try:
+            user_input = r.recognize_google(audio)
+            st.text_area("Recognized Speech:", value=user_input, height=150)
+            return user_input
+        except sr.UnknownValueError:
+            st.warning("Google Speech Recognition could not understand audio.")
+        except sr.RequestError as e:
+            st.error(f"Could not request results from Google Speech Recognition service; {e}")
