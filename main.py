@@ -2,39 +2,60 @@ import streamlit as st
 from google_search import google_search
 from feedback import submit_feedback
 from utils import extract_paragraphs
-from wit import Wit
 import time
-import speech_recognition as sr
+import tempfile
 import os
+import speech_recognition as sr
 
-# Initialize Wit.ai client
-WIT_ACCESS_TOKEN = os.getenv('WIT_ACCESS_TOKEN')# Replace with your Wit.ai access token
-wit_client = Wit(WIT_ACCESS_TOKEN)
-
-def recognize_speech():
+# Function to handle microphone recording and speech recognition
+def handle_microphone():
     try:
-        r = sr.Recognizer()
-        with sr.Microphone() as source:
-            st.info("Speak your question or concern...")
-            audio = r.listen(source, timeout=5)  # Adjust timeout as needed
+        st.info("Click the microphone icon and start speaking.")
 
-        # Use Wit.ai for speech recognition
-        response = wit_client.speech(audio.get_wav_data(), {'Content-Type': 'audio/wav'})
+        # Record audio from the microphone using streamlit.audio_recorder
+        audio_file = st.audio_recorder("audio.wav", format="wav")
 
-        # Extract recognized text from Wit.ai response
-        if 'text' in response:
-            user_input = response['text']
-            st.text_area("Recognized Speech:", value=user_input, height=150)
-            return user_input
-        else:
-            st.error("No recognized speech found. Please try again.")
+        if st.button("Submit"):
+            if audio_file:
+                # Perform speech recognition on the recorded audio file
+                recognizer = sr.Recognizer()
+                with sr.AudioFile(audio_file):
+                    audio_data = recognizer.record(audio_file)
 
-    except sr.WaitTimeoutError:
-        st.warning("Timeout: No speech detected.")
+                # Use Google's speech recognition API (replace with your preferred method)
+                user_input = recognizer.recognize_google(audio_data)
+
+                st.text_area("Recognized Speech:", value=user_input, height=150)
+
+                # Example: Perform search based on recognized text
+                search_results = google_search(user_input, 'Articles')
+                if search_results:
+                    st.subheader("Top Articles:")
+                    for i, result in enumerate(search_results[:5], start=1):
+                        title = result.get('title', '')
+                        snippet = result.get('snippet', '')
+                        link = result.get('link', '')
+
+                        st.markdown(f"### {i}. [{title}]({link})")
+                        st.write(snippet)
+                        st.write(f"Link: [{link}]({link})")
+                        st.write("")
+
+                        content = extract_paragraphs(link)
+                        if content:
+                            st.markdown(f"#### Extracted Content from [{title}]({link}):")
+                            st.text_area(f"Content {i}:", value=content, height=150)
+
+                else:
+                    st.error("No articles found.")
+
+            else:
+                st.warning("Please record your speech.")
+
     except sr.UnknownValueError:
         st.warning("Speech recognition could not understand audio.")
     except sr.RequestError as e:
-        st.error(f"Could not request results from Wit.ai service; {e}")
+        st.error(f"Could not request results from Google Speech Recognition service; {e}")
     except Exception as e:
         st.error(f"Error in recognizing speech: {e}")
 
@@ -54,29 +75,7 @@ def main():
     use_speech_recognition = st.radio("Choose input method:", ('Type', 'Speak'))
 
     if use_speech_recognition == 'Speak':
-        user_input = recognize_speech()
-        if user_input:
-            search_results = google_search(user_input, 'Articles')
-            if search_results:
-                st.subheader("Top Articles:")
-                for i, result in enumerate(search_results[:5], start=1):
-                    title = result.get('title', '')
-                    snippet = result.get('snippet', '')
-                    link = result.get('link', '')
-
-                    st.markdown(f"### {i}. [{title}]({link})")
-                    st.write(snippet)
-                    st.write(f"Link: [{link}]({link})")
-                    st.write("")
-
-                    content = extract_paragraphs(link)
-                    if content:
-                        st.markdown(f"#### Extracted Content from [{title}]({link}):")
-                        st.text_area(f"Content {i}:", value=content, height=150)
-            else:
-                st.error("No articles found.")
-        else:
-            st.warning("Speech recognition failed. Please try again.")
+        handle_microphone()
 
     else:
         user_input = st.text_area("Enter your question or concern:", height=150)
