@@ -60,7 +60,7 @@ Contributions are welcome! If you have ideas for new features, improvements, or 
 ---
 
 ## License
-This project is licensed under the MIT License - see the [!LICENSE](https://github.com/SoumyadipRoy16/mindmate/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License - see the ![LICENSE](https://github.com/SoumyadipRoy16/mindmate/blob/main/LICENSE) file for details.
 
 ---
 
