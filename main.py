@@ -1,7 +1,6 @@
 import streamlit as st
 import time
 import os
-import requests
 from google_search import google_search
 from feedback import submit_feedback
 from utils import extract_paragraphs
