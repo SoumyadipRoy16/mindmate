@@ -1,8 +1,7 @@
 import streamlit as st
 from google_search import google_search
 from feedback import submit_feedback
-from utils import extract_paragraphs
-import speech_recognition as sr
+from utils import extract_paragraphs, recognize_speech, extract_keywords
 import time
 
 def main():
@@ -23,6 +22,10 @@ def main():
     if use_speech_recognition == 'Speak':
         user_input = recognize_speech()
         if user_input:
+            keywords = extract_keywords(user_input)
+
+            st.info(f"Keywords: {', '.join(keywords)}")
+
             search_results = google_search(user_input, 'Articles')
             if search_results:
                 st.subheader("Top Articles:")
@@ -51,6 +54,10 @@ def main():
 
         if st.button("Submit"):
             if user_input:
+                keywords = extract_keywords(user_input)
+
+                st.info(f"Keywords: {', '.join(keywords)}")
+
                 with st.spinner("Analyzing your input..."):
                     search_results = google_search(user_input, search_type)
 
