@@ -65,17 +65,22 @@ def main():
                                 fileInput.files = dataTransfer.files;
                                 document.getElementById('uploadButton').click();
                             });
+
+                            document.getElementById('startBtn').style.display = 'none';
+                            document.getElementById('stopBtn').style.display = 'inline-block';
                         });
                 }
 
                 function stopRecording() {
                     mediaRecorder.stop();
+                    document.getElementById('startBtn').style.display = 'inline-block';
+                    document.getElementById('stopBtn').style.display = 'none';
                 }
             </script>
         """, unsafe_allow_html=True)
 
-        st.button("Start Recording", on_click=lambda: st.session_state.update(recording=True))
-        st.button("Stop Recording", on_click=lambda: st.session_state.update(recording=False))
+        st.button("Start Recording", on_click=lambda: st.script_runner("startRecording()"), key="startBtn")
+        st.button("Stop Recording", on_click=lambda: st.script_runner("stopRecording()"), key="stopBtn", disabled=True)
 
         audio_file = st.file_uploader("Upload Audio", type=["wav"], key="fileInput")
 
