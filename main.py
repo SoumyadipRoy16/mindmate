@@ -2,22 +2,26 @@ import streamlit as st
 from google_search import google_search
 from feedback import submit_feedback
 from utils import extract_paragraphs
-import speech_recognition as sr
+from pydub import AudioSegment
+from pydub.generators import Sine
 import time
 
 def recognize_speech():
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        st.info("Speak your question or concern...")
-        audio = r.listen(source)
-        try:
-            user_input = r.recognize_google(audio)
-            st.text_area("Recognized Speech:", value=user_input, height=150)
-            return user_input
-        except sr.UnknownValueError:
-            st.warning("Google Speech Recognition could not understand audio.")
-        except sr.RequestError as e:
-            st.error(f"Could not request results from Google Speech Recognition service; {e}")
+    try:
+        st.info("Simulating audio input...")
+
+        # Generate a sine wave audio of 3 seconds (simulated audio input)
+        sine_wave = Sine(440).to_audio_segment(duration=3000)  # 440 Hz frequency for 3 seconds
+        audio = AudioSegment.empty().append(sine_wave)
+
+        # Simulate speech recognition on the generated audio
+        user_input = "Sample text"  # Replace with actual speech recognition code
+
+        st.text_area("Recognized Speech:", value=user_input, height=150)
+        return user_input
+
+    except Exception as e:
+        st.error(f"Error in recognizing speech: {e}")
 
 def main():
     st.set_page_config(page_title="MindMate Search", page_icon=":brain:")
