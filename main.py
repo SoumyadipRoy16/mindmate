@@ -2,34 +2,38 @@ import streamlit as st
 from google_search import google_search
 from feedback import submit_feedback
 from utils import extract_paragraphs
-from pydub import AudioSegment
-from pydub.generators import Sine
-import speech_recognition as sr
-import tempfile
+from wit import Wit
 import time
+import speech_recognition as sr
+
+# Initialize Wit.ai client
+WIT_ACCESS_TOKEN = '67Q6ZJXLDVOIOH5Y43YPFQZW5LSGXDLS'  # Replace with your Wit.ai access token
+wit_client = Wit(WIT_ACCESS_TOKEN)
 
 def recognize_speech():
     try:
-        st.info("Simulating audio input...")
+        r = sr.Recognizer()
+        with sr.Microphone() as source:
+            st.info("Speak your question or concern...")
+            audio = r.listen(source, timeout=5)  # Adjust timeout as needed
 
-        # Generate a simple sine wave audio segment for 1 second
-        sine_wave = Sine(440).to_audio_segment(duration=10000)  # 440 Hz frequency for 1 second
-        audio = sine_wave.set_sample_width(2).set_frame_rate(16000)  # Adjust sample width and frame rate
+        # Use Wit.ai for speech recognition
+        response = wit_client.speech(audio.get_wav_data(), {'Content-Type': 'audio/wav'})
 
-        # Save the audio segment to a temporary file
-        with tempfile.NamedTemporaryFile(delete=False) as tmp_audio_file:
-            tmp_audio_filename = tmp_audio_file.name
-            audio.export(tmp_audio_filename, format="wav")
-
-            # Use SpeechRecognition to recognize speech from the generated audio
-            r = sr.Recognizer()
-            with sr.AudioFile(tmp_audio_filename) as source:
-                audio_data = r.record(source)
-
-            user_input = r.recognize_google(audio_data)
+        # Extract recognized text from Wit.ai response
+        if 'text' in response:
+            user_input = response['text']
             st.text_area("Recognized Speech:", value=user_input, height=150)
             return user_input
+        else:
+            st.error("No recognized speech found. Please try again.")
 
+    except sr.WaitTimeoutError:
+        st.warning("Timeout: No speech detected.")
+    except sr.UnknownValueError:
+        st.warning("Speech recognition could not understand audio.")
+    except sr.RequestError as e:
+        st.error(f"Could not request results from Wit.ai service; {e}")
     except Exception as e:
         st.error(f"Error in recognizing speech: {e}")
 
@@ -44,7 +48,7 @@ def main():
     for char in "Hello, I am MindMate. What can I help you with today?":
         typed_text += char
         initial_prompt.text(typed_text)
-        time.sleep(0.05)  # Use time.sleep() from Python's time module
+        time.sleep(0.05)
 
     use_speech_recognition = st.radio("Choose input method:", ('Type', 'Speak'))
 
