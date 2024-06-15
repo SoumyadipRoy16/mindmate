@@ -2,8 +2,10 @@ import streamlit as st
 import urllib.request
 from bs4 import BeautifulSoup
 import speech_recognition as sr
-from gtts import gTTS
-import os
+from transformers import pipeline
+
+# Initialize named entity recognition (NER) pipeline
+nlp_keywords = pipeline("ner", model="dslim/bert-base-NER", tokenizer="dslim/bert-base-NER")
 
 def extract_paragraphs(url):
     try:
@@ -18,17 +20,27 @@ def extract_paragraphs(url):
         st.error(f"Error extracting content from {url}: {e}")
         return ""
 
+def extract_keywords(text):
+    try:
+        result = nlp_keywords(text)
+        keywords = [entity.get('word') for entity in result if entity.get('score') > 0.5]
+        return keywords
+    except Exception as e:
+        st.error(f"Error extracting keywords: {e}")
+        return []
 
 def recognize_speech():
     r = sr.Recognizer()
     with sr.Microphone() as source:
-        st.info("Speak your question or concern...")
+        st.info("Listening...")
         audio = r.listen(source)
-        try:
-            user_input = r.recognize_google(audio)
-            st.text_area("Recognized Speech:", value=user_input, height=150)
-            return user_input
-        except sr.UnknownValueError:
-            st.warning("Google Speech Recognition could not understand audio.")
-        except sr.RequestError as e:
-            st.error(f"Could not request results from Google Speech Recognition service; {e}")
+        st.info("Processing...")
+    try:
+        user_input = r.recognize_google(audio)
+        return user_input
+    except sr.UnknownValueError:
+        st.warning("Google Speech Recognition could not understand audio.")
+        return ""
+    except sr.RequestError as e:
+        st.error(f"Could not request results from Google Speech Recognition service; {e}")
+        return ""
