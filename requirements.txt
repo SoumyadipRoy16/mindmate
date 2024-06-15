@@ -1,4 +1,3 @@
-av
 streamlit
 requests
 transformers
@@ -6,12 +5,5 @@ gtts
 beautifulsoup4
 urllib3
 speechrecognition
-python-dotenv
-google-cloud-speech
 pyaudio
-wit
-deepspeech
-numpy
 pydub
-streamlit-webrtc
-twilio
