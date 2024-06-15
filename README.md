@@ -65,7 +65,10 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 ---
 
 ## Author
---------------
-Soumyadip Roy |
---------------
+==============
+
+Soumyadip Roy
+              
+==============
+
 ---
