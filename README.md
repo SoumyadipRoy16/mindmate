@@ -29,7 +29,7 @@ To get started with MindMate, follow these simple steps:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your_username/mindmate.git
+   git clone https://github.com/SoumyadipRoy16/mindmate.git
    cd mindmate
 2. **Install dependencies**:
    ```bash
