@@ -74,8 +74,8 @@ def main():
             </script>
         """, unsafe_allow_html=True)
 
-        st.button("Start Recording", on_click=lambda: st.session_state['recording'] = True)
-        st.button("Stop Recording", on_click=lambda: st.session_state['recording'] = False)
+        st.button("Start Recording", on_click=lambda: st.session_state.update(recording=True))
+        st.button("Stop Recording", on_click=lambda: st.session_state.update(recording=False))
 
         audio_file = st.file_uploader("Upload Audio", type=["wav"], key="fileInput")
 
