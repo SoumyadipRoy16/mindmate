@@ -6,4 +6,4 @@ beautifulsoup4
 urllib3
 speechrecognition
 python-dotenv
-pyaudio
+google-cloud-speech
