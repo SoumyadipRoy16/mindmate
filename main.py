@@ -1,56 +1,29 @@
 import streamlit as st
+import tempfile
+import os
+import time
+import subprocess
+import speech_recognition as sr
 from google_search import google_search
 from feedback import submit_feedback
 from utils import extract_paragraphs
-import time
-import tempfile
-import os
-import speech_recognition as sr
+from wit import Wit
 
-# Function to handle microphone recording and speech recognition
-def handle_microphone():
+# Initialize Wit.ai client
+WIT_ACCESS_TOKEN = '67Q6ZJXLDVOIOH5Y43YPFQZW5LSGXDLS'  # Replace with your Wit.ai access token
+wit_client = Wit(WIT_ACCESS_TOKEN)
+
+def recognize_speech(audio_file):
     try:
-        st.info("Click the microphone icon and start speaking.")
+        recognizer = sr.Recognizer()
 
-        # Record audio from the microphone using streamlit.audio_recorder
-        audio_file = st.audio_recorder("audio.wav", format="wav")
+        # Use speech_recognition library to recognize speech
+        with sr.AudioFile(audio_file) as source:
+            audio_data = recognizer.record(source)
 
-        if st.button("Submit"):
-            if audio_file:
-                # Perform speech recognition on the recorded audio file
-                recognizer = sr.Recognizer()
-                with sr.AudioFile(audio_file):
-                    audio_data = recognizer.record(audio_file)
-
-                # Use Google's speech recognition API (replace with your preferred method)
-                user_input = recognizer.recognize_google(audio_data)
-
-                st.text_area("Recognized Speech:", value=user_input, height=150)
-
-                # Example: Perform search based on recognized text
-                search_results = google_search(user_input, 'Articles')
-                if search_results:
-                    st.subheader("Top Articles:")
-                    for i, result in enumerate(search_results[:5], start=1):
-                        title = result.get('title', '')
-                        snippet = result.get('snippet', '')
-                        link = result.get('link', '')
-
-                        st.markdown(f"### {i}. [{title}]({link})")
-                        st.write(snippet)
-                        st.write(f"Link: [{link}]({link})")
-                        st.write("")
-
-                        content = extract_paragraphs(link)
-                        if content:
-                            st.markdown(f"#### Extracted Content from [{title}]({link}):")
-                            st.text_area(f"Content {i}:", value=content, height=150)
-
-                else:
-                    st.error("No articles found.")
-
-            else:
-                st.warning("Please record your speech.")
+        # Perform speech recognition
+        user_input = recognizer.recognize_google(audio_data)
+        return user_input
 
     except sr.UnknownValueError:
         st.warning("Speech recognition could not understand audio.")
@@ -72,41 +45,44 @@ def main():
         initial_prompt.text(typed_text)
         time.sleep(0.05)
 
-    use_speech_recognition = st.radio("Choose input method:", ('Type', 'Speak'))
+    st.info("Please click the button below to start recording your speech:")
 
-    if use_speech_recognition == 'Speak':
-        handle_microphone()
+    uploaded_file = st.file_uploader("Upload audio file (WAV format recommended)", type=["wav"])
 
-    else:
-        user_input = st.text_area("Enter your question or concern:", height=150)
-        search_type = st.selectbox("Choose type of response:", ('Articles', 'Links'))
+    if uploaded_file:
+        st.audio(uploaded_file, format='audio/wav')
 
         if st.button("Submit"):
-            if user_input:
-                with st.spinner("Analyzing your input..."):
-                    search_results = google_search(user_input, search_type)
+            try:
+                # Perform speech recognition on the uploaded audio file
+                user_input = recognize_speech(uploaded_file.name)
+                if user_input:
+                    st.text_area("Recognized Speech:", value=user_input, height=150)
 
-                if search_results:
-                    st.subheader(f"Top {search_type} Results:")
-                    for i, result in enumerate(search_results[:5], start=1):
-                        title = result.get('title', '')
-                        snippet = result.get('snippet', '')
-                        link = result.get('link', '')
+                    # Example: Perform search based on recognized text
+                    search_results = google_search(user_input, 'Articles')
+                    if search_results:
+                        st.subheader("Top Articles:")
+                        for i, result in enumerate(search_results[:5], start=1):
+                            title = result.get('title', '')
+                            snippet = result.get('snippet', '')
+                            link = result.get('link', '')
 
-                        st.markdown(f"### {i}. [{title}]({link})")
-                        st.write(snippet)
-                        st.write(f"Link: [{link}]({link})")
-                        st.write("")
+                            st.markdown(f"### {i}. [{title}]({link})")
+                            st.write(snippet)
+                            st.write(f"Link: [{link}]({link})")
+                            st.write("")
 
-                        content = extract_paragraphs(link)
-                        if content:
-                            st.markdown(f"#### Extracted Content from [{title}]({link}):")
-                            st.text_area(f"Content {i}:", value=content, height=150)
+                            content = extract_paragraphs(link)
+                            if content:
+                                st.markdown(f"#### Extracted Content from [{title}]({link}):")
+                                st.text_area(f"Content {i}:", value=content, height=150)
 
-                else:
-                    st.error("No results found. Please try again.")
-            else:
-                st.warning("Please provide your question or concern.")
+                    else:
+                        st.error("No articles found.")
+
+            except Exception as e:
+                st.error(f"Error processing audio file: {e}")
 
     st.sidebar.title("Feedback")
     feedback = st.sidebar.text_area("Enter your feedback here:")
