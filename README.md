@@ -4,6 +4,8 @@
 
 MindMate is your intelligent tool for personalized mental health support, providing tailored resources and recommendations based on your needs. Whether you prefer typing your queries or speaking directly to MindMate, our advanced machine learning models are here to assist you.
 
+---
+
 ## Key Features
 
 - **Dual Input Methods**: Choose between typing your queries or speaking directly to MindMate for a seamless user experience.
@@ -13,9 +15,13 @@ MindMate is your intelligent tool for personalized mental health support, provid
 - **Interactive Exercises**: Engage in interactive mental health exercises tailored to improve well-being and resilience.
 - **Feedback System**: Provide feedback and rate your experience to help us continuously improve MindMate.
 
+---
+
 ## How It Works
 
 MindMate leverages the Google Custom Search API to fetch relevant articles based on your queries. Using state-of-the-art speech recognition and natural language processing models, it understands and responds to your voice inputs, making information readily accessible anytime, anywhere.
+
+---
 
 ## Getting Started
 
@@ -31,7 +37,9 @@ To get started with MindMate, follow these simple steps:
 3. **Run the application**:
    ```bash
    streamlit run main.py
-   
+
+---
+
 ## Explore MindMate
 - Choose your preferred input method: typing or speaking.
 - Discover articles and resources recommended by MindMate.
@@ -39,13 +47,24 @@ To get started with MindMate, follow these simple steps:
 - Connect with mental health professionals for personalized support.
 - Provide feedback to help us enhance your experience.
 
+---
+
 ## Feedback and Support
 We value your feedback! If you encounter any issues or have suggestions for improvement, please reach out to us. You can submit feedback directly through the application or contact us via email.
+
+---
 
 ## Contributing
 Contributions are welcome! If you have ideas for new features, improvements, or bug fixes, feel free to fork the repository and submit a pull request.
 
+---
+
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-**Author:** Soumyadip Roy
+---
+
+## Author
+Soumyadip Roy
+
+---
