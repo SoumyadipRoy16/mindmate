@@ -74,10 +74,12 @@ def main():
             </script>
         """, unsafe_allow_html=True)
 
-        st.button("Start Recording", on_click="startRecording()")
-        st.button("Stop Recording", on_click="stopRecording()")
-        audio_file = st.file_uploader("Upload Audio", type=["wav"], id="fileInput", key="uploader", on_change=lambda: st.session_state.uploaded=True)
-        if st.session_state.get('uploaded', False):
+        st.button("Start Recording", on_click=lambda: st.session_state['recording'] = True)
+        st.button("Stop Recording", on_click=lambda: st.session_state['recording'] = False)
+
+        audio_file = st.file_uploader("Upload Audio", type=["wav"], key="fileInput")
+
+        if st.button("Process Audio", key="uploadButton") and audio_file:
             with st.spinner("Recognizing speech..."):
                 user_input = recognize_speech_google(audio_file)
                 if user_input:
