@@ -31,3 +31,21 @@ To get started with MindMate, follow these simple steps:
 3. **Run the application**:
    ```bash
    streamlit run main.py
+   
+## Explore MindMate
+- Choose your preferred input method: typing or speaking.
+- Discover articles and resources recommended by MindMate.
+- Engage in interactive exercises for mental well-being.
+- Connect with mental health professionals for personalized support.
+- Provide feedback to help us enhance your experience.
+
+## Feedback and Support
+We value your feedback! If you encounter any issues or have suggestions for improvement, please reach out to us. You can submit feedback directly through the application or contact us via email.
+
+## Contributing
+Contributions are welcome! If you have ideas for new features, improvements, or bug fixes, feel free to fork the repository and submit a pull request.
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+**Author:** Soumyadip Roy
