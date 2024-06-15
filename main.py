@@ -5,20 +5,6 @@ from utils import extract_paragraphs
 import speech_recognition as sr
 import time
 
-def recognize_speech():
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        st.info("Speak your question or concern...")
-        audio = r.listen(source)
-        try:
-            user_input = r.recognize_google(audio)
-            st.text_area("Recognized Speech:", value=user_input, height=150)
-            return user_input
-        except sr.UnknownValueError:
-            st.warning("Google Speech Recognition could not understand audio.")
-        except sr.RequestError as e:
-            st.error(f"Could not request results from Google Speech Recognition service; {e}")
-
 def main():
     st.set_page_config(page_title="MindMate Search", page_icon=":brain:")
 
