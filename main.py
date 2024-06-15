@@ -1,11 +1,13 @@
 import streamlit as st
 import time
 import os
+import requests
 from google_search import google_search
 from feedback import submit_feedback
 from utils import extract_paragraphs
 from google.cloud import speech_v1p1beta1 as speech
 
+# Function to transcribe speech using Google Cloud Speech-to-Text
 def recognize_speech_google(audio_file):
     client = speech.SpeechClient()
     audio = speech.RecognitionAudio(content=audio_file.read())
@@ -19,6 +21,7 @@ def recognize_speech_google(audio_file):
         return result.alternatives[0].transcript
     return None
 
+# Main function to run the Streamlit app
 def main():
     st.set_page_config(page_title="MindMate Search", page_icon=":brain:")
 
@@ -32,88 +35,47 @@ def main():
         initial_prompt.text(typed_text)
         time.sleep(0.05)
 
+    # Radio button to choose input method
     use_speech_recognition = st.radio("Choose input method:", ('Type', 'Speak'))
 
     if use_speech_recognition == 'Speak':
-        st.info("Click the button and start speaking.")
-        
-        # Buttons for starting and stopping recording
-        if st.button("Start Recording"):
-            st.markdown("""
-                <script>
-                    let mediaRecorder;
-                    let audioChunks = [];
+        st.info("Click the microphone icon and start speaking.")
 
-                    function startRecording() {
-                        navigator.mediaDevices.getUserMedia({ audio: true })
-                            .then(stream => {
-                                mediaRecorder = new MediaRecorder(stream);
-                                mediaRecorder.start();
+        # Function to handle microphone recording and speech recognition
+        def handle_microphone():
+            # Placeholder for recorded audio file
+            recorded_audio = st.file_uploader("Recording...", type=["wav"], accept_multiple_files=False, key="audioUploader")
 
-                                mediaRecorder.addEventListener("dataavailable", event => {
-                                    audioChunks.push(event.data);
-                                });
-
-                                mediaRecorder.addEventListener("stop", () => {
-                                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                                    const audioUrl = URL.createObjectURL(audioBlob);
-                                    const audio = new Audio(audioUrl);
-                                    const link = document.createElement('a');
-                                    link.href = audioUrl;
-                                    link.download = 'recording.wav';
-                                    link.click();
-                                    const fileInput = document.getElementById('fileInput');
-                                    const dataTransfer = new DataTransfer();
-                                    dataTransfer.items.add(new File([audioBlob], 'recording.wav'));
-                                    fileInput.files = dataTransfer.files;
-                                    document.getElementById('uploadButton').click();
-                                });
-
-                                mediaRecorder.start();
-                                document.getElementById('startBtn').style.display = 'none';
-                                document.getElementById('stopBtn').style.display = 'inline-block';
-                            });
-                    }
-
-                    function stopRecording() {
-                        mediaRecorder.stop();
-                        document.getElementById('startBtn').style.display = 'inline-block';
-                        document.getElementById('stopBtn').style.display = 'none';
-                    }
-
-                    document.getElementById('startBtn').onclick = startRecording;
-                    document.getElementById('stopBtn').onclick = stopRecording;
-                </script>
-            """, unsafe_allow_html=True)
-            st.button("Stop Recording", key="stopBtn", on_click=None)
-        
-        # File uploader
-        audio_file = st.file_uploader("Upload Audio", type=["wav"], key="fileInput")
-
-        if st.button("Process Audio", key="uploadButton") and audio_file:
-            with st.spinner("Recognizing speech..."):
-                user_input = recognize_speech_google(audio_file)
-                if user_input:
-                    st.text_area("Recognized Speech:", value=user_input, height=150)
-                    search_results = google_search(user_input, 'Articles')
-                    if search_results:
-                        st.subheader("Top Articles:")
-                        for i, result in enumerate(search_results[:5], start=1):
-                            title = result.get('title', '')
-                            snippet = result.get('snippet', '')
-                            link = result.get('link', '')
-                            st.markdown(f"### {i}. [{title}]({link})")
-                            st.write(snippet)
-                            st.write(f"Link: [{link}]({link})")
-                            st.write("")
-                            content = extract_paragraphs(link)
-                            if content:
-                                st.markdown(f"#### Extracted Content from [{title}]({link}):")
-                                st.text_area(f"Content {i}:", value=content, height=150)
+            # If audio is uploaded, process it
+            if recorded_audio:
+                with st.spinner("Recognizing speech..."):
+                    user_input = recognize_speech_google(recorded_audio)
+                    if user_input:
+                        st.text_area("Recognized Speech:", value=user_input, height=150)
+                        search_results = google_search(user_input, 'Articles')
+                        if search_results:
+                            st.subheader("Top Results:")
+                            for i, result in enumerate(search_results[:5], start=1):
+                                title = result.get('title', '')
+                                snippet = result.get('snippet', '')
+                                link = result.get('link', '')
+                                st.markdown(f"### {i}. [{title}]({link})")
+                                st.write(snippet)
+                                st.write(f"Link: [{link}]({link})")
+                                st.write("")
+                                content = extract_paragraphs(link)
+                                if content:
+                                    st.markdown(f"#### Extracted Content from [{title}]({link}):")
+                                    st.text_area(f"Content {i}:", value=content, height=150)
+                        else:
+                            st.error("No articles found.")
                     else:
-                        st.error("No articles found.")
-                else:
-                    st.error("Speech recognition failed. Please try again.")
+                        st.error("Speech recognition failed. Please try again.")
+
+        # Display microphone icon and handle speech input
+        if st.button("🎤 Start Recording", key="microphoneBtn"):
+            handle_microphone()
+
     else:
         user_input = st.text_area("Enter your question or concern:", height=150)
         search_type = st.selectbox("Choose type of response:", ('Articles', 'Links'))
@@ -141,6 +103,7 @@ def main():
             else:
                 st.warning("Please provide your question or concern.")
 
+    # Sidebar for feedback
     st.sidebar.title("Feedback")
     feedback = st.sidebar.text_area("Enter your feedback here:")
     rating = st.sidebar.slider("Rate your experience (1 = poor, 5 = excellent)", min_value=1, max_value=5, step=1, value=5)
