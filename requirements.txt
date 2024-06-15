@@ -10,7 +10,7 @@ python-dotenv
 google-cloud-speech
 pyaudio
 wit
-deepspeech==0.9.3
+deepspeech
 numpy
 pydub
 streamlit-webrtc
