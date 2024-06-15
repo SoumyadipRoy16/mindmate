@@ -7,3 +7,4 @@ urllib3
 speechrecognition
 python-dotenv
 google-cloud-speech
+pyaudio
