@@ -4,21 +4,31 @@ from feedback import submit_feedback
 from utils import extract_paragraphs
 from pydub import AudioSegment
 from pydub.generators import Sine
+import speech_recognition as sr
+import tempfile
 import time
 
 def recognize_speech():
     try:
         st.info("Simulating audio input...")
 
-        # Generate a sine wave audio of 3 seconds (simulated audio input)
-        sine_wave = Sine(440).to_audio_segment(duration=3000)  # 440 Hz frequency for 3 seconds
-        audio = AudioSegment.empty().append(sine_wave)
+        # Generate a simple sine wave audio segment for 1 second
+        sine_wave = Sine(440).to_audio_segment(duration=1000)  # 440 Hz frequency for 1 second
+        audio = sine_wave.set_sample_width(2).set_frame_rate(16000)  # Adjust sample width and frame rate
 
-        # Simulate speech recognition on the generated audio
-        user_input = "Sample text"  # Replace with actual speech recognition code
+        # Save the audio segment to a temporary file
+        with tempfile.NamedTemporaryFile(delete=False) as tmp_audio_file:
+            tmp_audio_filename = tmp_audio_file.name
+            audio.export(tmp_audio_filename, format="wav")
 
-        st.text_area("Recognized Speech:", value=user_input, height=150)
-        return user_input
+            # Use SpeechRecognition to recognize speech from the generated audio
+            r = sr.Recognizer()
+            with sr.AudioFile(tmp_audio_filename) as source:
+                audio_data = r.record(source)
+
+            user_input = r.recognize_google(audio_data)
+            st.text_area("Recognized Speech:", value=user_input, height=150)
+            return user_input
 
     except Exception as e:
         st.error(f"Error in recognizing speech: {e}")
