@@ -7,7 +7,7 @@ import time
 import speech_recognition as sr
 
 # Initialize Wit.ai client
-WIT_ACCESS_TOKEN = '67Q6ZJXLDVOIOH5Y43YPFQZW5LSGXDLS'  # Replace with your Wit.ai access token
+WIT_ACCESS_TOKEN = os.getenv('WIT_ACCESS_TOKEN')# Replace with your Wit.ai access token
 wit_client = Wit(WIT_ACCESS_TOKEN)
 
 def recognize_speech():
