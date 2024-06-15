@@ -1,117 +1,24 @@
 import streamlit as st
-import time
-from pathlib import Path
-import av
-import numpy as np
-import pydub
-from collections import deque
-from typing import List
-from deepspeech import Model
-from streamlit_webrtc import WebRtcMode, webrtc_streamer
-
-# Importing other necessary functions and modules
 from google_search import google_search
 from feedback import submit_feedback
 from utils import extract_paragraphs
+import speech_recognition as sr
+import time
 
-HERE = Path(__file__).parent
-
-# DeepSpeech model setup
-MODEL_URL = "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.pbmm"
-LANG_MODEL_URL = "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer"
-MODEL_LOCAL_PATH = HERE / "models/deepspeech-0.9.3-models.pbmm"
-LANG_MODEL_LOCAL_PATH = HERE / "models/deepspeech-0.9.3-models.scorer"
-
-# Download DeepSpeech models if not already downloaded
-def download_models():
-    def download_file(url, download_to: Path, expected_size=None):
-        if download_to.exists():
-            if expected_size and download_to.stat().st_size == expected_size:
-                return
-        else:
-            st.info(f"{url} is already downloaded.")
-            if not st.button("Download again?"):
-                return
-
-        download_to.parent.mkdir(parents=True, exist_ok=True)
-        weights_warning, progress_bar = None, None
+def recognize_speech():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        st.info("Speak your question or concern...")
+        audio = r.listen(source)
         try:
-            weights_warning = st.warning("Downloading %s..." % url)
-            progress_bar = st.progress(0)
-            with open(download_to, "wb") as output_file:
-                with urllib.request.urlopen(url) as response:
-                    length = int(response.info()["Content-Length"])
-                    counter = 0.0
-                    MEGABYTES = 2.0 ** 20.0
-                    while True:
-                        data = response.read(8192)
-                        if not data:
-                            break
-                        counter += len(data)
-                        output_file.write(data)
-                        weights_warning.warning(
-                            "Downloading %s... (%6.2f/%6.2f MB)"
-                            % (url, counter / MEGABYTES, length / MEGABYTES)
-                        )
-                        progress_bar.progress(min(counter / length, 1.0))
-        finally:
-            if weights_warning is not None:
-                weights_warning.empty()
-            if progress_bar is not None:
-                progress_bar.empty()
+            user_input = r.recognize_google(audio)
+            st.text_area("Recognized Speech:", value=user_input, height=150)
+            return user_input
+        except sr.UnknownValueError:
+            st.warning("Google Speech Recognition could not understand audio.")
+        except sr.RequestError as e:
+            st.error(f"Could not request results from Google Speech Recognition service; {e}")
 
-# Initialize DeepSpeech model
-def init_deepspeech_model():
-    download_models()
-    model = Model(str(MODEL_LOCAL_PATH))
-    model.enableExternalScorer(str(LANG_MODEL_LOCAL_PATH))
-    return model
-
-# Function for speech-to-text conversion
-def recognize_speech(model):
-    st.info("Speak your question or concern...")
-    webrtc_ctx = webrtc_streamer(
-        key="speech-to-text",
-        mode=WebRtcMode.SENDONLY,
-        audio_receiver_size=1024,
-        media_stream_constraints={"video": False, "audio": True},
-    )
-
-    if not webrtc_ctx.state.playing:
-        return None
-
-    status_indicator = st.empty()
-    stream = model.createStream()
-
-    while True:
-        status_indicator.write("Listening...")
-
-        try:
-            audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=1)
-        except queue.Empty:
-            time.sleep(0.1)
-            status_indicator.write("No audio frame received.")
-            continue
-
-        sound_chunk = pydub.AudioSegment.empty()
-
-        for audio_frame in audio_frames:
-            sound = pydub.AudioSegment(
-                data=audio_frame.to_ndarray().tobytes(),
-                sample_width=audio_frame.format.bytes,
-                frame_rate=audio_frame.sample_rate,
-                channels=len(audio_frame.layout.channels),
-            )
-            sound_chunk += sound
-
-        if len(sound_chunk) > 0:
-            sound_chunk = sound_chunk.set_channels(1).set_frame_rate(model.sampleRate())
-            buffer = np.array(sound_chunk.get_array_of_samples())
-            stream.feedAudioContent(buffer)
-            text = stream.intermediateDecode()
-            return text
-
-# Main Streamlit app
 def main():
     st.set_page_config(page_title="MindMate Search", page_icon=":brain:")
 
@@ -123,14 +30,12 @@ def main():
     for char in "Hello, I am MindMate. What can I help you with today?":
         typed_text += char
         initial_prompt.text(typed_text)
-        time.sleep(0.05)
+        time.sleep(0.05)  # Use time.sleep() from Python's time module
 
     use_speech_recognition = st.radio("Choose input method:", ('Type', 'Speak'))
 
-    model = init_deepspeech_model()
-
     if use_speech_recognition == 'Speak':
-        user_input = recognize_speech(model)
+        user_input = recognize_speech()
         if user_input:
             search_results = google_search(user_input, 'Articles')
             if search_results:
