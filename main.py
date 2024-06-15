@@ -36,52 +36,58 @@ def main():
 
     if use_speech_recognition == 'Speak':
         st.info("Click the button and start speaking.")
-        st.markdown("""
-            <script>
-                let mediaRecorder;
-                let audioChunks = [];
+        
+        # Buttons for starting and stopping recording
+        if st.button("Start Recording"):
+            st.markdown("""
+                <script>
+                    let mediaRecorder;
+                    let audioChunks = [];
 
-                function startRecording() {
-                    navigator.mediaDevices.getUserMedia({ audio: true })
-                        .then(stream => {
-                            mediaRecorder = new MediaRecorder(stream);
-                            mediaRecorder.start();
+                    function startRecording() {
+                        navigator.mediaDevices.getUserMedia({ audio: true })
+                            .then(stream => {
+                                mediaRecorder = new MediaRecorder(stream);
+                                mediaRecorder.start();
 
-                            mediaRecorder.addEventListener("dataavailable", event => {
-                                audioChunks.push(event.data);
+                                mediaRecorder.addEventListener("dataavailable", event => {
+                                    audioChunks.push(event.data);
+                                });
+
+                                mediaRecorder.addEventListener("stop", () => {
+                                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                                    const audioUrl = URL.createObjectURL(audioBlob);
+                                    const audio = new Audio(audioUrl);
+                                    const link = document.createElement('a');
+                                    link.href = audioUrl;
+                                    link.download = 'recording.wav';
+                                    link.click();
+                                    const fileInput = document.getElementById('fileInput');
+                                    const dataTransfer = new DataTransfer();
+                                    dataTransfer.items.add(new File([audioBlob], 'recording.wav'));
+                                    fileInput.files = dataTransfer.files;
+                                    document.getElementById('uploadButton').click();
+                                });
+
+                                mediaRecorder.start();
+                                document.getElementById('startBtn').style.display = 'none';
+                                document.getElementById('stopBtn').style.display = 'inline-block';
                             });
+                    }
 
-                            mediaRecorder.addEventListener("stop", () => {
-                                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                                const audioUrl = URL.createObjectURL(audioBlob);
-                                const audio = new Audio(audioUrl);
-                                const link = document.createElement('a');
-                                link.href = audioUrl;
-                                link.download = 'recording.wav';
-                                link.click();
-                                const fileInput = document.getElementById('fileInput');
-                                const dataTransfer = new DataTransfer();
-                                dataTransfer.items.add(new File([audioBlob], 'recording.wav'));
-                                fileInput.files = dataTransfer.files;
-                                document.getElementById('uploadButton').click();
-                            });
+                    function stopRecording() {
+                        mediaRecorder.stop();
+                        document.getElementById('startBtn').style.display = 'inline-block';
+                        document.getElementById('stopBtn').style.display = 'none';
+                    }
 
-                            document.getElementById('startBtn').style.display = 'none';
-                            document.getElementById('stopBtn').style.display = 'inline-block';
-                        });
-                }
-
-                function stopRecording() {
-                    mediaRecorder.stop();
-                    document.getElementById('startBtn').style.display = 'inline-block';
-                    document.getElementById('stopBtn').style.display = 'none';
-                }
-            </script>
-        """, unsafe_allow_html=True)
-
-        st.button("Start Recording", on_click=lambda: st.script_runner("startRecording()"), key="startBtn")
-        st.button("Stop Recording", on_click=lambda: st.script_runner("stopRecording()"), key="stopBtn", disabled=True)
-
+                    document.getElementById('startBtn').onclick = startRecording;
+                    document.getElementById('stopBtn').onclick = stopRecording;
+                </script>
+            """, unsafe_allow_html=True)
+            st.button("Stop Recording", key="stopBtn", on_click=None)
+        
+        # File uploader
         audio_file = st.file_uploader("Upload Audio", type=["wav"], key="fileInput")
 
         if st.button("Process Audio", key="uploadButton") and audio_file:
