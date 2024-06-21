@@ -1,7 +1,9 @@
 flask
-flask-pymongo
+flask_pymongo
 transformers
 torch
+requests
+BeautifulSoup
 requests
 sklearn
 speechrecognition
