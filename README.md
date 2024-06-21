@@ -42,7 +42,7 @@ MindMate is an AI-driven web application designed to provide personalized mental
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/your_username/mindmate.git
+git clone https://github.com/SoumyadipRoy16/mindmate.git
 cd mindmate
 ```
 ```bash
