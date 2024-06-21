@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mindmate - Mental Health Support</title>
+    <link rel="stylesheet" href="/static/styles/landing.css">
+
+</head>
+<body>
+    <div class="header-left">
+        <a href="./" id="mindmatesite">mindmate</a>
+    </div>
+    <nav class="header-nav">
+        <a style="right: 300px;" href="#registerModal" id="registerLink">Register</a>
+        <a style="right: 180px;" href="#loginModal" id="loginLink">Login</a>
+        <a style="right: 20px;" href="/dashboard">Dashboard</a>
+        {% if user and user.profile_pic %}
+        <div class="profile-icon">
+            <img src="/static/profile_pics/" alt="Profile Icon">
+        </div>
+        {% endif %}
+    </nav>
+    <div class="content">
+        <div class="header-text" id="headerText"></div>
+        <div>
+            <a href="./index.html" id="chatWithUsLink">Chat with us</a>
+        </div>
+    </div>
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('#registerModal')">&times;</span>
+            <h2>Sign Up</h2>
+            <form action="/register" method="POST">
+                <input type="text" name="first_name" placeholder="First Name" required>
+                <input type="text" name="last_name" placeholder="Last Name" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('#loginModal')">&times;</span>
+            <h2>Login</h2>
+            <form action="/login" method="POST">
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+    <script src="/static/scripts/landing.js"></script>
+</body>
+</html>

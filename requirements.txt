@@ -1,0 +1,7 @@
+flask
+flask-pymongo
+transformers
+torch
+requests
+sklearn
+speechrecognition
