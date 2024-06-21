@@ -69,4 +69,4 @@ python app.py
 **Contributions are welcome! If you have suggestions or improvements, please fork the repository and create a pull request. For major changes, please open an issue first to discuss the proposed changes.**
 
 ## License
-**This project is licensed under the MIT License - see the [LICENSE] file for details.**
+**This project is licensed under the MIT License - see the [LICENSE](https://github.com/SoumyadipRoy16/mindmate/blob/main/LICENSE) file for details.**
