@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Support Chatbot</title>
+    <link rel="stylesheet" href="/static/styles/style.css">
+</head> 
+<body>
+    <div class="header-left">
+        <a href="./" id="mindmatesite">mindmate</a>
+    </div>
+    <div class="header-right">
+        <a href="./feedback.html" id="managefeedback">Feedback</a>
+    </div>
+
+    <div class="chat-container">
+        <div class="chat-box">
+            <div id="chat" class="chat-content">
+                <div class="logo">
+                    <img src="/static/images/logo.png" alt="Chatbot Logo">
+                </div>
+            </div>
+            <div class="input-box">
+                <input type="text" id="userInput" placeholder="Type your message here..." onkeypress="sendMessage(event)">
+                <button onclick="sendMessageByButton()">
+                    <img src="/static/images/send_icon.png" alt="Send">
+                </button>
+                <button onclick="attachFile()">
+                    <img src="/static/images/attachment_icon.png" alt="Attachment">
+                </button>
+                <button onclick="startRecording()">
+                    <img src="/static/images/voice_icon.png" alt="Voice" id="voiceIcon">
+                </button>
+                <input type="file" id="fileInput" style="display: none;">
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box" id="infoBox">
+        <div class="info-header">
+            Get articles and talk with professionals
+        </div>
+        <div class="info-content">
+            <select id="illnessSelect" onchange="loadInfo()">
+                <option>Choose the mental illness</option>
+            </select>
+            <div id="articles" style="width: 420%;">
+                <h3>Articles</h3>
+                <p>No article found.</p>
+            </div>
+            <div id="exercises" style="width: 420%;">
+                <h3>Exercises</h3>
+                <ul>
+                </ul>
+            </div>
+            <div id="professionals" style="width: 420%;">
+                <h3>Professionals</h3>
+                <ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="cloud-icon" onclick="toggleInfoBox()" onmouseover="showTooltip()" onmouseout="hideTooltip()">
+        <img src="/static/images/cloud.png" alt="Info">
+        <span class="tooltip" id="tooltip">Get Information</span>
+    </div>
+
+    <script src="/static/scripts/script.js"></script>
+</body>
+</html>

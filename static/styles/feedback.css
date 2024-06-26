@@ -1,0 +1,193 @@
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgb(22, 21, 21);
+            background-size: 600% 600%;
+            animation: gradient 15s ease infinite;
+            font-family: 'Arial', sans-serif;
+            color: white;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .header-left a {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 32px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.9); 
+            text-decoration: none;
+            z-index: 1000; 
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            align-items: center;
+            width: 80%;
+            max-width: 800px;
+            padding: 20px;
+            margin-top: 100px;
+            background: transparent;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-text {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .feedback-form {
+            width: 100%;
+            max-width: 600px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .feedback-form label {
+            font-size: 18px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .feedback-form textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.3);
+            color: white;
+            resize: vertical;
+            min-height: 150px;
+            margin-bottom: 15px;
+        }
+
+        .star-rating {
+            margin-bottom: 15px;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+
+        .star-rating label {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 30px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .star-rating input[type="radio"]:checked ~ label,
+        .star-rating input[type="radio"]:checked ~ label ~ label {
+            color: #ffd700;
+        }
+
+        
+        .feedback-form button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .feedback-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .review-list {
+            margin-top: 30px;
+            width: 100%;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .review-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .review-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            margin-right: 15px;
+        }
+
+        .review-content {
+            flex: 1;
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .review-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .review-date {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .review-stars {
+            color: #ffd700;
+        }
+
+        .review-message {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .reply {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        .reply-header {
+            font-size: 14px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .reply-message {
+            font-size: 14px;
+            margin-top: 5px;
+        }

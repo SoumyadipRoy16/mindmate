@@ -1,0 +1,106 @@
+[
+    {"title": "Anxiety disorders", "info": [
+                                        {
+                                            "Name: " : "Dr. Tathagata Chatterjee", 
+                                            "Specialization: " : "MBBS, M.D. (Psychiatry)", 
+                                            "Clinic: " : "Sahayta Clinic(Salt Lake, Kolkata)" 
+                                        }
+
+                                    ]
+    }, 
+    {"title": "Psychotic Disorders", "info":[
+                                        {
+                                            "Name: " : "Dr. Shreyasi Paul", 
+                                            "Specialization: " : "Psychiatrist,Neuropsychiatrist,Addiction Psychiatrist", 
+                                            "Clinic: " : "Dr Paul's Mind Clinic" 
+                                        }
+
+                                    ]
+    },
+    {"title": "Trauma and Stressor-Related Disorders", "info": [
+                                        {
+                                            "Name: " : "Dr. Krishanu Chakrabarty", 
+                                            "Specialization: " : "Psychiatrist,Neuropsychiatrist,Sexologist", 
+                                            "Clinic: " : "Dr Krishanu Chakrabarty's Clinic" 
+                                        }
+
+                                    ]
+    
+    },
+    {"title": "Obsessive-Compulsive and Related Disorders", "info": [
+                                        {
+                                            "Name: " : "Dr. Sukhendu Mondal", 
+                                            "Specialization: " : "Psychiatrist", 
+                                            "Clinic: " : "Dr. Sukhendu Mondal Clinic" 
+                                        }
+
+                                    ]
+
+    },
+    {"title": "Dissociative Disorders", "info":[
+                                        {
+                                            "Name: " : "Dr. Shreyasi Paul", 
+                                            "Specialization: " : "Psychiatrist,Neuropsychiatrist,Addiction Psychiatrist", 
+                                            "Clinic: " : "Dr Paul's Mind Clinic" 
+                                        }
+
+                                    ]
+
+    },
+    {"title": "Somatic Symptom and Related Disorders", "info":[
+                                        {
+                                            "Name: " : "Dr. Shreyasi Paul", 
+                                            "Specialization: " : "Psychiatrist,Neuropsychiatrist,Addiction Psychiatrist", 
+                                            "Clinic: " : "Dr Paul's Mind Clinic" 
+                                        }
+
+                                    ]
+
+    },
+    {"title": "Feeding and Eating Disorders", "info":[
+                                        {
+                                            "Name: " : "Dr. Shreyasi Paul", 
+                                            "Specialization: " : "Psychiatrist,Neuropsychiatrist,Addiction Psychiatrist", 
+                                            "Clinic: " : "Dr Paul's Mind Clinic" 
+                                        }
+
+                                    ]
+
+    },
+    {"title": "Sleep Disorders","info":[
+                                        {
+                                            "Name: " : "Dr. Shreyasi Paul", 
+                                            "Specialization: " : "Psychiatrist,Neuropsychiatrist,Addiction Psychiatrist", 
+                                            "Clinic: " : "Dr Paul's Mind Clinic" 
+                                        }
+                                    ]
+
+    },
+    {"title": "Substance-Related and Addictive Disorders", "info":[
+                                        {
+                                            "Name: " : "Dr. Shreyasi Paul", 
+                                            "Specialization: " : "Psychiatrist,Neuropsychiatrist,Addiction Psychiatrist", 
+                                            "Clinic: " : "Dr Paul's Mind Clinic" 
+                                        }
+                                    ]
+    
+    },
+    {"title": "Neurodevelopmental Disorders", "info":[
+                                        {
+                                            "Name: " : "Dr. Shreyasi Paul", 
+                                            "Specialization: " : "Psychiatrist,Neuropsychiatrist,Addiction Psychiatrist", 
+                                            "Clinic: " : "Dr Paul's Mind Clinic" 
+                                        }
+                                    ]
+    
+    },
+    {"title": "Personality Disorders", "info":[
+                                        {
+                                            "Name: " : "Dr. Shreyasi Paul", 
+                                            "Specialization: " : "Psychiatrist,Neuropsychiatrist,Addiction Psychiatrist", 
+                                            "Clinic: " : "Dr Paul's Mind Clinic" 
+                                        }
+                                    ] 
+    
+    }
+]

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Mindmate</title>
+    <link rel="stylesheet" href="/static/styles/dashboard.css">
+</head>
+<body>
+    <div class="header-left">
+        <a href="/" id="mindmatesite">mindmate</a>
+    </div>
+    <div class="header-right">
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="content">
+        <h2>Welcome to your Dashboard</h2>
+        <h3>Hello, {{ user.first_name }} {{ user.last_name }}</h3>
+
+        <form action="/dashboard" method="POST" enctype="multipart/form-data">
+            <div class="avatar">
+                <img src="/static/images/avatar.png" alt="Default Avatar" id="avatar-img">
+            </div>
+            <input type="file" id="profile_pic" name="profile_pic" accept="image/*" onchange="previewImage(this)"><br>
+            <input type="text" name="additional_info" placeholder="Additional Info"><br>
+            <button type="submit">Update Profile</button>
+        </form>
+    </div>
+
+    <script src="/static/scripts/dashboard.js"></script>
+
+</body>
+</html>

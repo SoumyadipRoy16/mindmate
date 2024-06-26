@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - Mindmate</title>
+    <link rel="stylesheet" href="/static/styles/feedback.css">
+
+</head> 
+<body>
+    <div class="header-left">
+        <a href="./" id="mindmatesite">mindmate</a>
+    </div>
+
+    <div class="content">
+        <div class="header-text">
+            We Value Your Feedback
+        </div>
+        <div class="feedback-form">
+            <form id="feedbackForm">
+                <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="5">
+                    <label for="star5">&#9733;</label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4">&#9733;</label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3">&#9733;</label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2">&#9733;</label>
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1">&#9733;</label>
+                </div>
+                <label for="feedbackMessage">Your Message:</label>
+                <textarea style="width: 500px;" id="feedbackMessage" name="feedbackMessage" placeholder="Write your feedback here..." required></textarea>
+                <button type="submit">Submit Feedback</button>
+            </form>
+        </div>
+
+        <div class="review-list" id="reviewList">
+            <div class="review-item">
+                <div class="review-avatar"></div>
+                <div class="review-content">
+                    <div class="review-header">
+                        <div class="review-name">Soumyadip Roy</div>
+                        <div class="review-date">June 20, 2024</div>
+                    </div>
+                    <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <div class="review-message">Great app! Really helps me organize my thoughts.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/scripts/feedback.js"></script>
+</body>
+</html>
