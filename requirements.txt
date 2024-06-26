@@ -3,3 +3,4 @@ flask_pymongo
 transformers
 requests
 speechrecognition
+bs4
