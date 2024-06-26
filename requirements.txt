@@ -1,7 +1,6 @@
 flask
 flask_pymongo
 transformers
-torch
 requests
 speechrecognition
 openai
