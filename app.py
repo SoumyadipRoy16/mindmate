@@ -241,6 +241,3 @@ def upload_audio():
             return jsonify({'response': 'Sorry, I could not understand the audio.'})
         except sr.RequestError as e:
             return jsonify({'response': f'Sorry, I could not process the audio. Error: {e}'})
-
-if __name__ == '__main__':
-    app.run(debug=True)
