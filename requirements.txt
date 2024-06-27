@@ -1,6 +1,8 @@
-flask
-flask_pymongo
-transformers
-requests
-speechrecognition
-bs4
+torch==2.3.1
+Flask==3.0.0
+Werkzeug==3.0.1
+requests==2.31.0
+Flask-PyMongo==2.3.0
+transformers==4.41.2
+beautifulsoup4==4.12.3
+SpeechRecognition==3.10.4
