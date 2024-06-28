@@ -1,11 +1,10 @@
 from flask import Flask, request, session, jsonify, render_template, redirect, flash
 from flask_pymongo import PyMongo
 from werkzeug.utils import secure_filename
-from transformers import AutoModelForCausalLM, AutoTokenizer
 from bs4 import BeautifulSoup
 import os
 import hashlib
-import requests
+import random
 import json
 import speech_recognition as sr
 
@@ -14,21 +13,33 @@ app.secret_key = os.getenv('SECRET_KEY')
 app.config["MONGO_URI"] = "mongodb://localhost:27017/mindmate"
 mongo = PyMongo(app)
 
+# Load KB.json
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
+with open(os.path.join(DATA_DIR, 'KB.json'), 'r') as file:
+    data = json.load(file)
 
-with open(os.path.join(DATA_DIR, 'articles.json'), 'r') as file:
-    articles = json.load(file)
+responses = {}
+for intent in data['intents']:
+    if 'responses' in intent:
+        responses[intent['tag']] = intent['responses']
+    else:
+        responses[intent['tag']] = ["Sorry, I don't have a response for that."]
 
-with open(os.path.join(DATA_DIR, 'exercises.json'), 'r') as file:
-    exercises = json.load(file)
+def predict_intent(text):
+    # Simple matching mechanism to predict intent
+    for intent in data['intents']:
+        for pattern in intent['patterns']:
+            if pattern.lower() in text.lower():
+                return intent['tag']
+    return None
 
-with open(os.path.join(DATA_DIR, 'professional.json'), 'r') as file:
-    professionals = json.load(file)
-
-# Initialize the DialoGPT model and tokenizer
-dialogpt_model_name = 'microsoft/DialoGPT-medium'
-dialogpt_model = AutoModelForCausalLM.from_pretrained(dialogpt_model_name)
-dialogpt_tokenizer = AutoTokenizer.from_pretrained(dialogpt_model_name)
+def generate_response(user_input):
+    intent = predict_intent(user_input)
+    if intent and intent in responses:
+        response = random.choice(responses[intent])
+    else:
+        response = "Sorry, I didn't understand that."
+    return response
 
 @app.route('/')
 def landing_page():
@@ -121,22 +132,6 @@ def index_page():
 @app.route('/feedback.html')
 def feedback_page():
     return render_template('feedback.html')
-
-def generate_response(user_input):
-    # Tokenize the user input and generate a response
-    new_user_input_ids = dialogpt_tokenizer.encode(user_input + dialogpt_tokenizer.eos_token, return_tensors='pt')
-    chat_history_ids = new_user_input_ids
-
-    # Generate a response from the model
-    response_ids = dialogpt_model.generate(chat_history_ids, max_length=1000, pad_token_id=dialogpt_tokenizer.eos_token_id)
-    response = dialogpt_tokenizer.decode(response_ids[:, chat_history_ids.shape[-1]:][0], skip_special_tokens=True)
-
-    # Check if response contains a goodbye message
-    goodbye_keywords = ['bye', 'cya', 'talk with you later']
-    if any(keyword in response for keyword in goodbye_keywords):
-        return response
-    else:
-        return response
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -243,4 +238,4 @@ def upload_audio():
             return jsonify({'response': f'Sorry, I could not process the audio. Error: {e}'})
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=int(os.environ.get('PORT', 8000)))
+    app.run(debug=True)
