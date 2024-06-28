@@ -11,7 +11,7 @@ import speech_recognition as sr
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
-app.config["MONGO_URI"] = os.getenv('MONGO_URL')
+app.config["MONGO_URI"] = "mongodb://localhost:27017/mindmate"
 mongo = PyMongo(app)
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
