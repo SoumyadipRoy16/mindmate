@@ -11,7 +11,7 @@ import speech_recognition as sr
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
-app.config["MONGO_URI"] = "mongodb://localhost:27017/mindmate"
+app.config["MONGO_URI"] = os.getenv('MONGO_URL')
 mongo = PyMongo(app)
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
@@ -241,3 +241,6 @@ def upload_audio():
             return jsonify({'response': 'Sorry, I could not understand the audio.'})
         except sr.RequestError as e:
             return jsonify({'response': f'Sorry, I could not process the audio. Error: {e}'})
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=int(os.environ.get('PORT', 8000)))
